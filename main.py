@@ -7,11 +7,14 @@ from Characters.Enemies import ENEMY_TIERS
 from Levels.fights import FIGHTS
 from combat import fight
 from menu import ask_choice, describe_hero_class
-from upgrades import offer_upgrade
+from hero_rankup import offer_rankup
+from Items import ITEM_TIERS
+from Items.offer import offer_item
+from inventory import Inventory
 
 PARTY_SIZE = 3
 PARTY_OPTIONS = 3
-
+START_FIGHT = 0
 
 def roll_party_options(heroes):
     """Return PARTY_OPTIONS parties of PARTY_SIZE different heroes each.
@@ -60,21 +63,33 @@ def summon_enemies(fight_plan):
     return enemies
 
 
+def item_tier(fight_number):
+    """Fights 1-2 give tier 1, fights 3-4 give tier 2, ... capped at the highest tier."""
+    return min((fight_number + 1) // 2, max(ITEM_TIERS))
+
+
 def main():
+    inventory = Inventory(prestige=0)
     party = choose_party(roll_party_options(HERO_TIERS[1]))
     for number, fight_plan in enumerate(FIGHTS, start=1):
-        if not fight_plan:
+        if not fight_plan or number < START_FIGHT:
             continue
         print(f"\n##### Fight {number} #####")
         if not fight(party, summon_enemies(fight_plan)):
             print("\nYour party has fallen. Game over.")
+            inventory.show()
             return
         for hero in party:
             hero.full_heal()
         print(f"Your party rests and recovers: {', '.join(str(hero) for hero in party)}")
-        if number % 2 == 0 and any(FIGHTS[number:]):
-            offer_upgrade(party)
+        if not any(FIGHTS[number:]):
+            continue
+        if number % 2 == 1:
+            offer_item(party, item_tier(number), inventory)
+        else:
+            offer_rankup(party)
     print("\nYour party cleared every fight. You win!")
+    inventory.show()
 
 
 if __name__ == "__main__":

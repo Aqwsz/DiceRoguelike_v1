@@ -1,5 +1,6 @@
 from Characters import faces
 from Characters.Enemies.enemy import Enemy
+from Characters.Enemies.tier1 import Skeleton
 
 # Bosses. Add them here (same format as tier1.py).
 
@@ -26,5 +27,6 @@ class Graveyard_King(Enemy):
         faces.HEAL_10,
         faces.HEAL_10,
     ]
+    SPAWN_ON_DEATH = {Skeleton: 2}
 
 ENEMIES = [Dragon, Graveyard_King]

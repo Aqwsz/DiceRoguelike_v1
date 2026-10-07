@@ -1,5 +1,6 @@
 from Characters import faces
 from Characters.Enemies.enemy import Enemy
+from Characters.Enemies.tier1 import Slime
 
 # Add tier 2 enemies here (same format as tier1.py).
 class Ogre(Enemy):
@@ -49,5 +50,6 @@ class Slime_Mother(Enemy):
         faces.MISS,
         faces.MISS,
     ]
+    SPAWN_ON_DEATH = {Slime: 2}
 
 ENEMIES = [Ogre, Troll, Vampire, Slime_Mother]

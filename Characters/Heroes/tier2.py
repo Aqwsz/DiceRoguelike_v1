@@ -75,4 +75,17 @@ class Sorcerer(Hero):
         faces.MISS,
     ]
 
-HEROES = [Knight, Paladin, Assassin, Hunter, Magician, Sorcerer]
+#Supporters
+class Alchemist(Hero):
+    NAME = "Alchemist"
+    MAX_HP = 8
+    FACES = [
+        faces.POISON_2,
+        faces.POISON_2,
+        faces.GROUP_HEAL_2,
+        faces.GROUP_HEAL_3,
+        faces.MISS,
+        faces.MISS,
+    ]
+
+HEROES = [Knight, Paladin, Assassin, Hunter, Magician, Sorcerer, Alchemist]

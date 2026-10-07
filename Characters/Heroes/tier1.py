@@ -80,5 +80,20 @@ class Speller(Hero):
         faces.MISS,
     ]
 
+#Supporters
 
-HEROES = [Warrior, Berserker, Archer, Rogue, Mage, Speller]
+class Potioner(Hero):
+    NAME = "Potioner"
+    MAX_HP = 6
+    FACES = [
+        faces.POISON_1,
+        faces.POISON_1,
+        faces.GROUP_HEAL_1,
+        faces.GROUP_HEAL_1,
+        faces.MISS,
+        faces.MISS,
+    ]
+
+
+
+HEROES = [Warrior, Berserker, Archer, Rogue, Mage, Speller, Potioner]

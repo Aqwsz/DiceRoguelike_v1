@@ -76,5 +76,18 @@ class Cleric(Hero):
         faces.MISS,
     ]
 
+#Supporters
+class Chemist(Hero):
+    NAME = "Chemist"
+    MAX_HP = 10
+    FACES = [
+        faces.POISON_3,
+        faces.POISON_4,
+        faces.GROUP_HEAL_4,
+        faces.GROUP_HEAL_4,
+        faces.MISS,
+        faces.MISS,
+    ]
 
-HEROES = [Barbarian, Ragebringer, Sniper, Quartermaster, Queen, Cleric]
+
+HEROES = [Barbarian, Ragebringer, Sniper, Quartermaster, Queen, Cleric, Chemist]

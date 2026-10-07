@@ -4,7 +4,7 @@ from Characters.Enemies.enemy import Enemy
 
 class Witch(Enemy): # Big damage
     NAME = "Witch"
-    MAX_HP = 8
+    MAX_HP = 16
     FACES = [
         faces.DAMAGE_4,       
         faces.DAMAGE_5,      
@@ -17,24 +17,24 @@ class Witch(Enemy): # Big damage
 
 class Pirate(Enemy): # Consistent
     NAME = "Pirate"
-    MAX_HP = 9
+    MAX_HP = 18
     FACES = [
-        faces.DAMAGE_2,           # 2 damage
-        faces.DAMAGE_2,           # 2 damage
-        faces.DAMAGE_2,          # 2 damage
-        faces.DAMAGE_2,          # 2 damage
-        faces.DAMAGE_2,     # 2 damage
-        faces.HEAL_2,           # 2 heal
+        faces.DAMAGE_3,   
+        faces.DAMAGE_3,   
+        faces.DAMAGE_3,   
+        faces.DAMAGE_3,   
+        faces.DAMAGE_3,   
+        faces.HEAL_2,     
     ]
 
 
 class Bloodsucker(Enemy): # Annoying
     NAME = "Bloodsucker"
-    MAX_HP = 7
+    MAX_HP = 14
     FACES = [
-        faces.DAMAGE_2,      # 1 damage
-        faces.DAMAGE_2,      # 1 damage
-        faces.DAMAGE_2,      # 2 damage
+        faces.DAMAGE_3,      # 1 damage
+        faces.DAMAGE_3,      # 1 damage
+        faces.DAMAGE_3,      # 2 damage
         faces.LIFE_DRAIN_1,         # 1 damage, 1 heal
         faces.LIFE_DRAIN_1,         # 1 damage, 1 heal
         faces.LIFE_DRAIN_2,           # 2 damage, 2 heal
