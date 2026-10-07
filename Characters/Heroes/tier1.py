@@ -1,0 +1,44 @@
+from Characters import faces
+from Characters.Heroes.hero import Hero
+
+
+class Warrior(Hero):
+    NAME = "Warrior"
+    MAX_HP = 10
+    FACES = [
+        faces.DAMAGE_1,         # 1 damage
+        faces.DAMAGE_1,         # 1 damage
+        faces.DAMAGE_1,         # 1 damage
+        faces.DAMAGE_1,         # 1 damage
+        faces.DAMAGE_2,         # 2 damage
+        faces.MISS,          # no effect
+    ]
+
+
+class Archer(Hero):
+    NAME = "Archer"
+    MAX_HP = 7
+    FACES = [
+        faces.DAMAGE_1,         # 1 damage
+        faces.DAMAGE_1,         # 1 damage
+        faces.DAMAGE_1,         # 1 damage
+        faces.DAMAGE_2,
+        faces.HEAL_1,
+        faces.MISS,          # no effect
+    ]
+
+
+class Mage(Hero):
+    NAME = "Mage"
+    MAX_HP = 5
+    FACES = [
+        faces.DAMAGE_3,      # 3 damage
+        faces.DAMAGE_3,      # 3 damage
+        faces.HEAL_1,        # 1 heal
+        faces.HEAL_1,        # 1 heal
+        faces.MISS,          # no effect
+        faces.MISS,          # no effect
+    ]
+
+
+HEROES = [Warrior, Archer, Mage]
