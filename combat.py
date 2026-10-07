@@ -1,3 +1,6 @@
+import random
+
+
 def apply_face(user, target, face):
     """Apply a rolled face. Extend this when you add new effect types to Face."""
     if face.damage:
@@ -15,22 +18,32 @@ def take_turn(user, target):
         print(f"  {target.name} is defeated!")
 
 
-def fight(hero, enemies):
-    """Hero fights a group of enemies until one side is dead. Returns True if the hero wins.
+def alive(characters):
+    return [character for character in characters if character.is_alive()]
 
-    Each round the hero attacks the first living enemy, then every living enemy attacks the hero.
+
+def fight(party, enemies):
+    """The party fights a group of enemies until one side is dead. Returns True if the party wins.
+
+    Each round every living hero attacks the first living enemy,
+    then every living enemy attacks a random living hero.
     """
-    print(f"\n=== {hero} vs {', '.join(str(enemy) for enemy in enemies)} ===")
+    print(f"\n=== {', '.join(str(hero) for hero in party)}")
+    print(f"    vs {', '.join(str(enemy) for enemy in enemies)} ===")
     round_number = 1
-    while hero.is_alive() and any(enemy.is_alive() for enemy in enemies):
+    while alive(party) and alive(enemies):
         input(f"\nRound {round_number} - press Enter to roll...")
-        target = next(enemy for enemy in enemies if enemy.is_alive())
-        take_turn(hero, target)
-        for enemy in enemies:
-            if enemy.is_alive() and hero.is_alive():
-                take_turn(enemy, hero)
+        for hero in alive(party):
+            if not alive(enemies):
+                break
+            take_turn(hero, alive(enemies)[0])
+        for enemy in alive(enemies):
+            if not alive(party):
+                break
+            take_turn(enemy, random.choice(alive(party)))
         round_number += 1
 
-    if hero.is_alive():
+    if alive(party):
         print("\nVictory!")
-    return hero.is_alive()
+        return True
+    return False

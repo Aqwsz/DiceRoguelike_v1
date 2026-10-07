@@ -28,8 +28,8 @@ class Pirate(Enemy): # Consistent
     ]
 
 
-class Vampire(Enemy): # Annoying
-    NAME = "Vampire"
+class Bloodsucker(Enemy): # Annoying
+    NAME = "Bloodsucker"
     MAX_HP = 7
     FACES = [
         faces.DAMAGE_2,      # 1 damage
@@ -41,4 +41,4 @@ class Vampire(Enemy): # Annoying
     ]
 
 
-ENEMIES = [Witch, Pirate, Vampire]
+ENEMIES = [Witch, Pirate, Bloodsucker]
