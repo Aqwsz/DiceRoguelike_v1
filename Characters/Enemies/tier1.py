@@ -42,7 +42,7 @@ class Skeleton(Enemy):
 
 class Crawler(Enemy):
     NAME = "Crawler"
-    MAX_HP = 7
+    MAX_HP = 4
     FACES = [
         faces.DAMAGE_4,
         faces.DAMAGE_5,

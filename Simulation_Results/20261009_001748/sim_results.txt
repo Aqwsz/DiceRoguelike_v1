@@ -1,0 +1,102 @@
+ITEM SELECTION BALANCE REPORT
+=============================
+Source: tools_sim_items.py · n=250 · heuristic pick/equip/rankup · round cap 80
+Outputs: Simulation_Results/20261009_001748/
+Elapsed: 17.9s (0.071s/game)
+
+HEADLINE
+--------
+With items:  25 wins (10.0%)  median depth 6   mean 7.90
+No items:     0 wins (0.0%)  median depth 3   mean 4.74
+Errors: 0
+
+MILESTONE SURVIVAL
+------------------
+                 With items   No items
+P(cleared ≥ 5)      53.6%
+P(cleared ≥10)      31.6%        8.0%
+P(cleared ≥15)      23.2%
+P(cleared ≥20)      10.0%        0.0%
+
+STOP DEPTH (with items): {0: 2, 1: 24, 2: 37, 3: 50, 4: 3, 5: 3, 6: 9, 7: 31, 8: 11, 9: 1, 11: 1, 12: 9, 13: 11, 15: 1, 16: 10, 17: 3, 18: 17, 19: 2, 20: 25}
+
+TOP AUTO-PICKED ITEMS
+---------------------
+    82 New Face: Damage 2 [Single Use]
+    66 Bandages +1
+    56 Sharpen +1
+    46 Toughness +1
+    39 Sharpen +2
+    38 New Face: Damage 1
+    37 Rations +1
+    34 Bandages +3
+    34 Bandages +2
+    28 New Face: Damage 7 [Single Use]
+    27 New Face: Damage 6 [Execute]
+    26 Bandages +4
+    25 Toughness +2
+    24 Toughness +3
+    24 Rations +3
+
+HERO STATISTICS (logged from item sims — real fights)
+-----------------------------------------------------
+Totals across all fights where that class was in the party.
+damage = direct hits + attributed DoTs + share of mana autospells.
+DoTs only tick while the target lives (no immortal-dummy snowball).
+
+Tier Name                F      Dmg   Direct     DoT     Heal    Shld    D/F    H/F    DPS    HPS
+3    Sniper            284     7343     7343       0      456      16   25.9    1.6   5.40   0.34
+3    Queen              87     2023     2023       0        0       0   23.3    0.0   5.10   0.00
+3    Quartermaster     289     6440     6440       0      323      13   22.3    1.1   3.96   0.20
+3    Cleric            123     2073     1554     519      382       5   16.9    3.1   2.88   0.53
+2    Assassin          313     4922     4922       0        0      21   15.7    0.0   2.76   0.00
+2    Hunter            308     4346     4346       0      456      37   14.1    1.5   2.41   0.25
+3    Ragebringer       389     5371     5371       0        0    3372   13.8    0.0   2.04   0.00
+3    Barbarian         290     3447     3447       0        0    7051   11.9    0.0   1.57   0.00
+2    Magician          204     2065     2065       0      173      34   10.1    0.8   1.79   0.15
+2    Knight            363     3650     3650       0        0    1080   10.1    0.0   1.47   0.00
+2    Sorcerer          193     1913     1913       0      168       0    9.9    0.9   1.67   0.15
+3    Chemist           223     2010     1514     496     3022      52    9.0   13.6   1.40   2.11
+2    Paladin           343     2986     2986       0        0    2818    8.7    0.0   1.21   0.00
+2    Alchemist         263     1862     1136     726     2096       0    7.1    8.0   1.05   1.19
+1    Rogue             315     1603     1603       0      321       2    5.1    1.0   1.02   0.20
+1    Mage              306     1521     1521       0      151       3    5.0    0.5   0.98   0.10
+1    Archer            363     1759     1759       0      147       3    4.8    0.4   0.92   0.08
+1    Warrior           334     1576     1576       0        0     380    4.7    0.0   0.82   0.00
+1    Speller           259     1107     1107       0      120       3    4.3    0.5   0.93   0.10
+1    Potioner          335     1233      560     673      734       7    3.7    2.2   0.71   0.42
+1    Berserker         347     1246     1246       0        0     577    3.6    0.0   0.67   0.00
+3    Doctor            116       38       38       0     4232       8    0.3   36.5   0.03   3.31
+1    Healer            328        0        0       0      837       7    0.0    2.5   0.00   0.37
+2    Medic             225        0        0       0     3463      15    0.0   15.4   0.00   1.26
+
+ENEMY STATISTICS (logged from same item sims)
+---------------------------------------------
+Tier       Name                F      Dmg   Direct     DoT    D/F    DPS
+finalboss  Dragon             13      681      681       0   52.4   6.13
+3          Hawk              198     3800     3800       0   19.2   2.80
+finalboss  Graveyard King     14      266      266       0   19.0   4.36
+3          Dice              202     3528     3528       0   17.5   2.32
+3          Bomber            214     3369     3369       0   15.7   4.11
+3          Werewolf          194     2780     2780       0   14.3   2.83
+miniboss   Pirate            159     1977     1977       0   12.4   2.28
+miniboss   Witch             130     1420     1420       0   10.9   2.08
+2          Troll             302     2769     2769       0    9.2   1.55
+miniboss   Bloodsucker       182     1567     1567       0    8.6   1.69
+2          Vampire           306     2519     2519       0    8.2   1.96
+2          Ogre              296     2143     2143       0    7.2   1.41
+1          Slime             875     6003     6003       0    6.9   1.08
+2          Slime Mother      293     1553     1553       0    5.3   1.19
+1          Crawler           985     4861     4861       0    4.9   1.18
+1          Goblin            989     4158     4158       0    4.2   0.93
+1          Skeleton          913     3496     3496       0    3.8   0.70
+
+HERO TIER AVERAGES (dmg/fight · heal/fight when present)
+--------------------------------------------------------
+  T1: n=8  avg D/F=3.9  avg H/F=0.9  avg DPS=0.76
+  T2: n=8  avg D/F=9.5  avg H/F=3.3  avg DPS=1.55
+  T3: n=8  avg D/F=15.4  avg H/F=7.0  avg DPS=2.80
+
+Run id:   20261009_001748
+Canvas:   /Users/keyi/.cursor/projects/Users-keyi-GamesCode-DiceRoguelike-v1/canvases/item-balance-20261009-001748.canvas.tsx
+Raw JSON: Simulation_Results/20261009_001748/sim_results.json · Baseline: Simulation_Results/20261009_001748/baseline.txt

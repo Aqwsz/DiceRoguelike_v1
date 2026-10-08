@@ -5,6 +5,7 @@ from collections import Counter
 from Characters.Heroes import HERO_TIERS
 from Characters.Enemies import ENEMY_TIERS
 from Levels.fights import FIGHTS
+from Levels.events import maybe_run_event
 from combat import fight
 from menu import ask_choice, describe_hero_class
 from hero_rankup import offer_rankup
@@ -82,6 +83,7 @@ def main():
         for hero in party:
             hero.full_heal()
         print(f"Your party rests and recovers: {', '.join(str(hero) for hero in party)}")
+        maybe_run_event(party, inventory, fight_plan, number)
         if not any(FIGHTS[number:]):
             continue
         if number % 2 == 1:

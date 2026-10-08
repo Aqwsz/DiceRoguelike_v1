@@ -1,5 +1,25 @@
-#### Welcome to Keyi's Dice Roguelike game!
+# Dice Roguelike
 
-How to install:
+Python dice autobattler — three heroes, twenty fights, items and rank-ups.
 
-Todo: Edit
+## Play (browser UI)
+
+```bash
+python3 -m ui.server
+```
+
+Open [http://127.0.0.1:8765](http://127.0.0.1:8765)
+
+## Play (terminal)
+
+```bash
+python3 main.py
+```
+
+## Balance sims
+
+```bash
+python3 tools_sim_items.py
+```
+
+Results land in `Simulation_Results/<timestamp>/` and a new Cursor canvas.

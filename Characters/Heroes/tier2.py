@@ -1,33 +1,38 @@
 from Characters import faces
 from Characters.Heroes.hero import Hero
+from Characters.Heroes.colors import Grey, Orange, Blue, Red
 
-# Warriors and tanks
-class Knight(Hero):
+########################################################
+# Warriors and tanks (Grey)
+
+class Knight(Hero, Grey):
     NAME = "Knight"
     MAX_HP = 14
     FACES = [
         faces.DAMAGE_2,
         faces.DAMAGE_3,
         faces.DAMAGE_3,
-        faces.DAMAGE_4,
-        faces.MISS,
+        faces.SHIELD_2,
+        faces.STUN,
         faces.MISS,
     ]
 
-class Paladin(Hero):
+class Paladin(Hero, Grey):
     NAME = "Paladin"
     MAX_HP = 11
     FACES = [
         faces.DAMAGE_2,
         faces.DAMAGE_2,
-        faces.DAMAGE_2,
         faces.DAMAGE_3,
-        faces.DAMAGE_3,
+        faces.SHIELD_3,
+        faces.SHIELD_3,
         faces.MISS,
     ]
 
-# Damage dealers
-class Assassin(Hero):
+########################################################
+# Damage dealers (Orange)
+
+class Assassin(Hero, Orange):
     NAME = "Assassin"
     MAX_HP = 9
     FACES = [
@@ -35,15 +40,15 @@ class Assassin(Hero):
         faces.DAMAGE_3,
         faces.DAMAGE_4,
         faces.DAMAGE_4,
-        faces.HEAL_2,
+        faces.WEAKEN_1,
         faces.MISS,
     ]
 
-class Hunter(Hero):
+class Hunter(Hero, Orange):
     NAME = "Hunter"
     MAX_HP = 8
     FACES = [
-        faces.DAMAGE_2,
+        faces.DAMAGE_ALL_1,
         faces.DAMAGE_3,
         faces.DAMAGE_4,
         faces.LIFE_DRAIN_1,
@@ -51,41 +56,58 @@ class Hunter(Hero):
         faces.MISS,
     ]
 
-class Magician(Hero):
+########################################################
+# Magic (Blue)
+
+class Magician(Hero, Blue):
     NAME = "Magician"
     MAX_HP = 6
     FACES = [
         faces.DAMAGE_3,
         faces.DAMAGE_4,
-        faces.DAMAGE_5,
+        faces.MANA_3,
         faces.HEAL_2,
         faces.MISS,
         faces.MISS,
     ]
 
-class Sorcerer(Hero):
+class Sorcerer(Hero, Blue):
     NAME = "Sorcerer"
     MAX_HP = 6
     FACES = [
         faces.DAMAGE_4,
         faces.DAMAGE_4,
-        faces.DAMAGE_5,
+        faces.MANA_2,
         faces.HEAL_1,
         faces.MISS,
         faces.MISS,
     ]
 
-#Supporters
-class Alchemist(Hero):
-    NAME = "Alchemist"
+########################################################
+# Supporters (Red)
+
+class Medic(Hero, Red):
+    NAME = "Medic"
     MAX_HP = 8
     FACES = [
-        faces.POISON_2,
-        faces.POISON_2,
+        faces.HEAL_2,
+        faces.HEAL_2,
+        faces.HEAL_3,
+        faces.HEAL_3,
         faces.GROUP_HEAL_2,
-        faces.GROUP_HEAL_3,
-        faces.MISS,
         faces.MISS,
     ]
 
-HEROES = [Knight, Paladin, Assassin, Hunter, Magician, Sorcerer, Alchemist]
+class Alchemist(Hero, Red):
+    NAME = "Alchemist"
+    MAX_HP = 8
+    FACES = [
+        faces.POISON_1,
+        faces.BURN_2,
+        faces.GROUP_HEAL_2,
+        faces.GROUP_HEAL_3,
+        faces.WEAKEN_1,
+        faces.MISS,
+    ]
+
+HEROES = [Knight, Paladin, Assassin, Hunter, Magician, Sorcerer, Medic, Alchemist]

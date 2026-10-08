@@ -7,8 +7,8 @@ ITEM_OPTIONS = 2
 
 
 def offer_item(party, tier, inventory):
-    """Offer ITEM_OPTIONS different random items from this tier; the chosen one is applied
-    and added to the inventory."""
+    """Offer ITEM_OPTIONS different random items from this tier. The chosen one goes into the
+    inventory and can be equipped right away; then the player can rearrange items."""
     pool = ITEM_TIERS[tier]
     if not pool:
         print(f"\n(No tier {tier} items yet.)")
@@ -19,6 +19,6 @@ def offer_item(party, tier, inventory):
     for number, item in enumerate(offers, start=1):
         print(f"  {number}. {item.NAME} - {item.describe()}")
     item = offers[ask_choice(len(offers))]
-    item.apply(party)
     inventory.add(item)
-    inventory.show()
+    inventory.equip(item, party)
+    inventory.manage(party)
