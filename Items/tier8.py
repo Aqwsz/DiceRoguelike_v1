@@ -1,6 +1,6 @@
 from Characters import faces
 from Items import common
-from Items.item import Item, MaxHpItem, PartyMaxHpItem, FaceSwapItem
+from Items.src.item import Item, MaxHpItem, PartyMaxHpItem, FaceSwapItem
 
 # Add tier 8 items here (see tier1.py for examples).
 
@@ -13,11 +13,15 @@ ITEMS = [
     #common.FACE_SWAP_HEAL_7,        # replace a face with Heal 5
     common.FACE_SWAP_DAMAGE_6_EXECUTE,  # Damage 5 + Single Use sticker
     common.FACE_SWAP_DAMAGE_5_FIRSTSTRIKE, 
+    common.FACE_SWAP_DAMAGE_3_BURN,
+    common.FACE_SWAP_DAMAGE_1_EXECUTE_FIRSTSTRIKE_BURN_POISON,
+
     common.FACE_SWAP_SHIELD_5_DEJA_VU,
+
     common.FACE_SWAP_HEAL_10_SINGLEUSE,
     #common.DAMAGE_BOOST_4,
     #common.HEAL_BOOST_6,            # +1 to every heal / group-heal face
     #common.SHIELD_BOOST_5,          # +1 to every shield face
-
+    common.STICKER_POISON,
 ]
 

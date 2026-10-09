@@ -16,7 +16,11 @@
       <p class="eyebrow">Keyi’s table</p>
       <h1 class="brand">Dice Roguelike</h1>
       <p class="lede">Assemble three heroes. Survive twenty fights. Let the dice decide.</p>
-      <button type="button" class="btn primary" id="btn-start">Start run</button>
+      <div class="title-actions">
+        <button type="button" class="btn primary" id="btn-start">Start run</button>
+        <button type="button" class="btn hidden" id="btn-continue">Continue</button>
+      </div>
+      <p class="title-hint">Esc opens Save / Quit during a run.</p>
     </section>
 
     <section class="screen hidden" id="screen-play">
@@ -26,10 +30,19 @@
           <h2 id="phase-title">Choose your party</h2>
           <p class="lede small" id="phase-sub"></p>
         </div>
-        <div class="mana-chip hidden" id="mana-chip">Mana <strong id="mana-val">0</strong></div>
+        <div class="fight-controls" id="fight-controls">
+          <div class="mana-chip hidden" id="mana-chip">Mana <strong id="mana-val">0</strong></div>
+          <label class="auto-toggle" title="Advance ~1s per combat beat">
+            <input type="checkbox" id="chk-auto" checked />
+            Auto 1s
+          </label>
+          <button type="button" class="btn" id="btn-inventory">Inventory</button>
+          <button type="button" class="btn" id="btn-next" disabled>Next turn</button>
+        </div>
       </header>
 
       <div class="battlefield" id="battlefield">
+        <svg class="fx-layer" id="fx-layer" aria-hidden="true"></svg>
         <div class="side party-side">
           <h3>Party</h3>
           <div class="fighters" id="party-fighters"></div>
@@ -50,6 +63,79 @@
       </div>
     </section>
   </main>
+
+  <div class="dice-panel hidden" id="dice-panel" role="dialog" aria-label="Dice sides">
+    <div class="dice-panel-card">
+      <header class="dice-panel-head">
+        <div>
+          <p class="eyebrow" id="dice-panel-eyebrow">Dice</p>
+          <h3 id="dice-panel-title">Hero</h3>
+        </div>
+        <button type="button" class="btn" id="dice-panel-close">Close</button>
+      </header>
+      <ol class="face-list" id="dice-panel-faces"></ol>
+    </div>
+  </div>
+
+  <div class="inv-panel hidden" id="inv-panel" role="dialog" aria-label="Inventory">
+    <div class="inv-panel-card">
+      <header class="dice-panel-head">
+        <div>
+          <p class="eyebrow">Bag · drag onto hero slots</p>
+          <h3>Inventory</h3>
+        </div>
+        <button type="button" class="btn" id="inv-panel-close">Close</button>
+      </header>
+      <p class="inv-hint" id="inv-hint">Right-click an item for its description. Drag a bag item onto an empty hero slot; drag an equipped item back here to unequip.</p>
+      <div class="inv-bag" id="inv-bag"></div>
+      <div class="inv-party" id="inv-party"></div>
+    </div>
+  </div>
+
+  <div class="dice-panel item-detail-panel hidden" id="item-detail-panel" role="dialog" aria-label="Item details">
+    <div class="dice-panel-card">
+      <header class="dice-panel-head">
+        <div>
+          <p class="eyebrow" id="item-detail-where">Item</p>
+          <h3 id="item-detail-title">Item</h3>
+        </div>
+        <button type="button" class="btn" id="item-detail-close">Close</button>
+      </header>
+      <p class="item-detail-body" id="item-detail-body"></p>
+    </div>
+  </div>
+
+  <div class="dice-panel hidden" id="face-pick-panel" role="dialog" aria-label="Choose die face">
+    <div class="dice-panel-card">
+      <header class="dice-panel-head">
+        <div>
+          <p class="eyebrow">This item attaches to a die face</p>
+          <h3 id="face-pick-title">Choose face</h3>
+        </div>
+        <button type="button" class="btn" id="face-pick-close">Cancel</button>
+      </header>
+      <ol class="face-pick-list" id="face-pick-faces"></ol>
+    </div>
+  </div>
+
+  <div class="menu-panel hidden" id="menu-panel" role="dialog" aria-label="Game menu">
+    <div class="menu-panel-card">
+      <header class="dice-panel-head">
+        <div>
+          <p class="eyebrow">Paused</p>
+          <h3>Game menu</h3>
+        </div>
+        <button type="button" class="btn" id="menu-resume">Resume</button>
+      </header>
+      <p class="inv-hint" id="menu-status">Save stores your party and fight. Mid-fight saves restart that fight.</p>
+      <div class="menu-actions">
+        <button type="button" class="btn" id="menu-save">Save</button>
+        <button type="button" class="btn" id="menu-save-quit">Save &amp; quit</button>
+        <button type="button" class="btn" id="menu-quit">Quit to title</button>
+      </div>
+    </div>
+  </div>
+
   <script src="/app.js"></script>
 </body>
 </html>

@@ -1,11 +1,17 @@
-from Characters.dice import Face
+from Characters.src.dice import Face
 
 # Every die face in the game. Edit effects here; heroes and enemies reference these by name.
 #
 # Combos (face + stickers) work the same way via lazy names, Slice & Dice style:
 #   faces.DAMAGE_10_EXECUTE
-#   faces.DAMAGE_3_SINGLEUSE_FIRSTSTRIKE
+#   faces.DAMAGE_3_POISON
+#   faces.DAMAGE_2_BURN_WEAKEN
+#   faces.DAMAGE_1_LIFE_DRAIN
 # These return a Side (face + stickers), which Character FACES lists accept.
+#
+# Status effects that scale with damage are stickers (Poison, Burn, Weaken, Life Drain),
+# not separate face types. Legacy names like POISON_2 / WEAKEN_1 still resolve via
+# __getattr__ to DAMAGE_N + sticker(s).
 
 # Damage: creates DAMAGE_1 ... DAMAGE_<MAX_DAMAGE>.
 MAX_DAMAGE = 100
@@ -17,30 +23,10 @@ MAX_DAMAGE_ALL = 100
 for amount in range(1, MAX_DAMAGE_ALL + 1):
     globals()[f"DAMAGE_ALL_{amount}"] = Face(f"Damage All {amount}", damage_all=amount)
 
-# Heal
+# Heal: restores HP on the living ally with the lowest current HP.
 MAX_HEAL = 100
 for amount in range(1, MAX_HEAL + 1):
     globals()[f"HEAL_{amount}"] = Face(f"Heal {amount}", heal=amount)
-
-# Damage + heal
-MAX_LIFE_DRAIN = 100
-for amount in range(1, MAX_LIFE_DRAIN + 1):
-    globals()[f"LIFE_DRAIN_{amount}"] = Face(f"Drain Life {amount}", damage=amount, heal=amount)
-
-# Poison: N damage now, plus N poison on the target (does not fade by default).
-MAX_POISON = 100
-for amount in range(1, MAX_POISON + 1):
-    globals()[f"POISON_{amount}"] = Face(f"Poison {amount}", damage=amount, poison=amount)
-
-# Burn: N damage now, plus N burn (fades by 1 each round after ticking).
-MAX_BURN = 100
-for amount in range(1, MAX_BURN + 1):
-    globals()[f"BURN_{amount}"] = Face(f"Burn {amount}", damage=amount, burn=amount)
-
-# Weaken: N damage now, and target deals N less damage.
-MAX_WEAKEN = 100
-for amount in range(1, MAX_WEAKEN + 1):
-    globals()[f"WEAKEN_{amount}"] = Face(f"Weaken {amount}", damage=amount, weaken=amount)
 
 # Shield: N shield on a random ally this round only.
 MAX_SHIELD = 100
@@ -66,10 +52,42 @@ THORNS = Face("Thorns", thorns=True)
 # No effect
 MISS = Face("Miss")
 
+# Legacy status faces -> DAMAGE_N + sticker(s). Longer prefixes first.
+_LEGACY_STATUS = (
+    ("POISON_BURN_", ("POISON", "BURN")),
+    ("LIFE_DRAIN_", ("LIFE_DRAIN",)),
+    ("POISON_", ("POISON",)),
+    ("BURN_", ("BURN",)),
+    ("WEAKEN_", ("WEAKEN",)),
+)
+
 
 def __getattr__(name):
-    """Lazy face+sticker recipes, e.g. DAMAGE_10_EXECUTE -> Side(DAMAGE_10, (EXECUTE,))."""
-    from Characters.combo import parse_side_name
+    """Lazy face+sticker recipes, plus legacy POISON_N / BURN_N / WEAKEN_N / LIFE_DRAIN_N."""
+    from Characters.src.combo import Side, match_sticker_suffixes, parse_side_name, sticker_aliases
+
+    for prefix, sticker_keys in _LEGACY_STATUS:
+        if not name.startswith(prefix):
+            continue
+        rest = name[len(prefix):]
+        amount_str, sep, sticker_tail = rest.partition("_")
+        if not amount_str.isdigit():
+            break
+        amount = int(amount_str)
+        if amount < 1 or amount > MAX_DAMAGE:
+            break
+        aliases = sticker_aliases()
+        stickers = []
+        for key in sticker_keys:
+            sticker = aliases.get(key)
+            if sticker is None:
+                raise AttributeError(f"legacy recipe {name!r}: missing sticker {key}")
+            stickers.append(sticker)
+        if sep and sticker_tail:
+            stickers.extend(match_sticker_suffixes("_" + sticker_tail, aliases))
+        side = Side(globals()[f"DAMAGE_{amount}"], tuple(stickers))
+        globals()[name] = side
+        return side
 
     plain = {key: value for key, value in globals().items() if isinstance(value, Face)}
     try:

@@ -1,5 +1,5 @@
 from Characters import faces
-from Characters.Enemies.enemy import Enemy
+from Characters.src.enemy import Enemy
 
 
 class Witch(Enemy): # Big damage
@@ -10,7 +10,7 @@ class Witch(Enemy): # Big damage
         faces.DAMAGE_5,      
         faces.DAMAGE_6,       
         faces.HEAL_3,       
-        faces.MISS,
+        faces.DAMAGE_2_POISON,
         faces.MISS,      
     ]
 
@@ -22,8 +22,8 @@ class Pirate(Enemy): # Consistent
         faces.DAMAGE_3_FIRSTSTRIKE,   
         faces.DAMAGE_3_FIRSTSTRIKE,   
         faces.DAMAGE_3,   
-        faces.DAMAGE_3,   
-        faces.DAMAGE_3,   
+        faces.DAMAGE_2_BURN,
+        faces.DAMAGE_3_BURN,   
         faces.HEAL_2,     
     ]
 
@@ -32,12 +32,12 @@ class Bloodsucker(Enemy): # Annoying
     NAME = "Bloodsucker"
     MAX_HP = 14
     FACES = [
-        faces.DAMAGE_3_FIRSTSTRIKE,      # 1 damage
-        faces.DAMAGE_3,      # 1 damage
-        faces.DAMAGE_3,      # 2 damage
-        faces.LIFE_DRAIN_1_FIRSTSTRIKE,         # 1 damage, 1 heal
-        faces.LIFE_DRAIN_1_FIRSTSTRIKE,         # 1 damage, 1 heal
-        faces.LIFE_DRAIN_2,           # 2 damage, 2 heal
+        faces.DAMAGE_3_FIRSTSTRIKE,    
+        faces.DAMAGE_2_POISON,      
+        faces.DAMAGE_2_POISON,     
+        faces.DAMAGE_1_LIFE_DRAIN_FIRSTSTRIKE,    
+        faces.DAMAGE_1_LIFE_DRAIN_FIRSTSTRIKE,    
+        faces.DAMAGE_2_LIFE_DRAIN,          
     ]
 
 

@@ -1,5 +1,5 @@
 from Characters import faces
-from Characters.Enemies.enemy import Enemy
+from Characters.src.enemy import Enemy
 
 # Add tier 3 enemies here (same format as tier1.py).
 class Hawk(Enemy):
@@ -18,12 +18,12 @@ class Dice(Enemy):
     NAME = "Dice"
     MAX_HP = 12
     FACES = [
-        faces.LIFE_DRAIN_1,
-        faces.LIFE_DRAIN_2,
-        faces.LIFE_DRAIN_3,
-        faces.LIFE_DRAIN_4,
-        faces.LIFE_DRAIN_5,
-        faces.LIFE_DRAIN_6,
+        faces.DAMAGE_1_LIFE_DRAIN,
+        faces.DAMAGE_2_LIFE_DRAIN,
+        faces.DAMAGE_3_LIFE_DRAIN,
+        faces.DAMAGE_4_LIFE_DRAIN,
+        faces.DAMAGE_5_LIFE_DRAIN,
+        faces.DAMAGE_6_LIFE_DRAIN,
     ]
 
 class Werewolf(Enemy):

@@ -23,13 +23,13 @@ builtins.input = lambda *a, **k: ""
 builtins.print = lambda *a, **k: None
 
 from Characters.Heroes import HERO_TIERS, HERO_TIER
-from Characters.Heroes.hero import Hero
+from Characters.src.hero import Hero
 from Characters.Enemies import ENEMY_TIERS
-from Characters.character import Character
-from Characters.combo import sides_from_faces
+from Characters.src.character import Character
+from Characters.src.combo import sides_from_faces
 from Levels.fights import FIGHTS
-import combat
-from inventory import Inventory
+import src.combat as combat
+from src.inventory import Inventory
 
 # Cap rounds so heal-stall fights cannot hang the sim.
 MAX_ROUNDS = 80
@@ -107,21 +107,23 @@ ENEMY_TIER_OF = {
 
 
 from Items import ITEM_TIERS
-from Items.offer import ITEM_OPTIONS
-from Items.item import (
+from Items.src.offer import ITEM_OPTIONS
+from Items.src.item import (
     MaxHpItem,
     PartyMaxHpItem,
     FaceSwapItem,
     StickerItem,
     MultiStickerItem,
     DamageBoostItem,
+    DamageAllBoostItem,
     HealBoostItem,
+    HealAllBoostItem,
     ShieldBoostItem,
 )
-from hero_rankup import roll_rankup_offers
+from src.hero_rankup import roll_rankup_offers
 from Levels.events import is_boss_fight, EVENTS, EVENT_CHANCE
 import main as main_mod
-import Items.offer as offer_mod
+import Items.src.offer as offer_mod
 import Levels.events as ev_mod
 
 
@@ -399,10 +401,14 @@ def score_item(item):
         return 5 * item.AMOUNT
     if isinstance(item, DamageBoostItem):
         return 14 * item.AMOUNT
+    if isinstance(item, DamageAllBoostItem):
+        return 16 * item.AMOUNT
     if isinstance(item, ShieldBoostItem):
         return 8 * item.AMOUNT
     if isinstance(item, HealBoostItem):
         return 6 * item.AMOUNT
+    if isinstance(item, HealAllBoostItem):
+        return 9 * item.AMOUNT
     if isinstance(item, FaceSwapItem):
         f = item.NEW_FACE
         score = (
@@ -435,11 +441,11 @@ def pick_hero(item, party):
         color = getattr(type(h), "COLOR", "")
         s = 20 if h.has_free_item_slot() else 0
         dmg = sum(f.damage + f.damage_all for f in h.die.faces)
-        if isinstance(item, DamageBoostItem) or (
+        if isinstance(item, (DamageBoostItem, DamageAllBoostItem)) or (
             isinstance(item, FaceSwapItem) and item.NEW_FACE.damage + item.NEW_FACE.damage_all > 0
         ):
             s += {"Orange": 5, "Blue": 4, "Grey": 2, "Red": 1}.get(color, 0) + dmg * 0.3
-        elif isinstance(item, HealBoostItem) or (
+        elif isinstance(item, (HealBoostItem, HealAllBoostItem)) or (
             isinstance(item, FaceSwapItem) and (item.NEW_FACE.heal or item.NEW_FACE.group_heal)
         ):
             s += {"Red": 5, "Blue": 3}.get(color, 1)

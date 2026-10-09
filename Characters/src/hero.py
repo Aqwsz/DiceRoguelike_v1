@@ -1,4 +1,4 @@
-from Characters.character import Character
+from Characters.src.character import Character
 
 MAX_ITEMS = 3
 

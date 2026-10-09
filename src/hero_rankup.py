@@ -1,7 +1,7 @@
 import random
 
 from Characters.Heroes import HERO_TIERS, HERO_TIER
-from menu import ask_choice, describe_hero_class
+from src.menu import ask_choice, describe_hero_class
 
 RANKUP_OPTIONS = 2
 

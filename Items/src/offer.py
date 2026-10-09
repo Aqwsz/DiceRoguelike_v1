@@ -1,7 +1,7 @@
 import random
 
 from Items import ITEM_TIERS
-from menu import ask_choice
+from src.menu import ask_choice
 
 ITEM_OPTIONS = 2
 

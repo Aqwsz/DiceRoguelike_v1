@@ -25,7 +25,10 @@ class Face:
         if self.damage_all:
             parts.append(f"{self.damage_all} damage to all foes")
         if self.heal:
-            parts.append(f"{self.heal} heal")
+            if self.damage or self.damage_all:
+                parts.append(f"{self.heal} heal to self")
+            else:
+                parts.append(f"{self.heal} heal to lowest-HP ally")
         if self.poison:
             parts.append(f"{self.poison} poison")
         if self.burn:
@@ -39,7 +42,7 @@ class Face:
         if self.stun:
             parts.append("stun a random foe")
         if self.weaken:
-            parts.append(f"{self.weaken} weaken")
+            parts.append(f"{self.weaken} weaken (1 turn)")
         if self.thorns:
             parts.append("thorns to a random ally")
         return f"{self.name} ({', '.join(parts) or 'no effect'})"

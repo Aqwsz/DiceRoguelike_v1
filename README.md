@@ -10,6 +10,12 @@ python3 -m ui.server
 
 Open [http://127.0.0.1:8765](http://127.0.0.1:8765)
 
+## To kill the UI
+
+```bash
+lsof -ti :8765 | xargs kill
+```
+
 ## Play (terminal)
 
 ```bash

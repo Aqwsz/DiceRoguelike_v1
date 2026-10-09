@@ -1,5 +1,5 @@
 from Characters import faces
-from Characters.Enemies.enemy import Enemy
+from Characters.src.enemy import Enemy
 from Characters.Enemies.tier1 import Skeleton
 
 # Bosses. Add them here (same format as tier1.py).
@@ -10,9 +10,9 @@ class Dragon(Enemy):
     FACES = [
         faces.DAMAGE_14,
         faces.DAMAGE_14,
-        faces.LIFE_DRAIN_10,
-        faces.LIFE_DRAIN_11,
-        faces.LIFE_DRAIN_12,
+        faces.DAMAGE_10_LIFE_DRAIN,
+        faces.DAMAGE_11_LIFE_DRAIN,
+        faces.DAMAGE_12_LIFE_DRAIN,
         faces.HEAL_20,
     ]
 

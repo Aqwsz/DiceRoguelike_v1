@@ -12,7 +12,7 @@ Naming: BASE[_STICKER[_STICKER...]]
 
 from dataclasses import dataclass
 
-from Characters.dice import Face
+from Characters.src.dice import Face
 
 
 @dataclass(frozen=True)

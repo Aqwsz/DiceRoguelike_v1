@@ -21,12 +21,15 @@ def alive(characters):
 
 
 def deal_damage(attacker, target, amount, attacker_side):
-    """Deal damage after weaken. If the target has thorns, the attacker takes it instead."""
+    """Deal damage after weaken. If the target has thorns, the attacker takes it instead.
+
+    Returns True if the intended target was hit (status stickers may apply), else False.
+    """
     if attacker is not None:
         amount = attacker.outgoing_damage(amount)
     if amount <= 0:
         print(f"    {target.name} takes no damage")
-        return
+        return False
 
     if target.thorns and attacker is not None:
         print(f"    Thorns! {attacker.name} takes {amount} instead of {target.name}")
@@ -36,13 +39,14 @@ def deal_damage(attacker, target, amount, attacker_side):
         print(f"    {attacker}")
         if not attacker.is_alive():
             defeat(attacker, attacker_side)
-        return
+        return False
 
     blocked, hp_lost = target.take_damage(amount)
     if blocked:
         print(f"    {target.name}'s shield blocked {blocked}")
     if hp_lost or not blocked:
         pass  # status printed by caller via character str
+    return True
 
 
 def sticker_damage(amount, stickers, user, target):
@@ -58,20 +62,40 @@ def sticker_damage(amount, stickers, user, target):
     return int(total)
 
 
+def _run_damage_stickers(user, target, amount, face, stickers):
+    for sticker in stickers:
+        sticker.after_damage(user, target, amount, face)
+
+
+def lowest_hp_ally(allies):
+    """Living ally with the fewest current HP (ties: first in list)."""
+    living = alive(allies)
+    if not living:
+        return None
+    return min(living, key=lambda ally: ally.hitpoints)
+
+
 def apply_face(user, target, allies, foes, face, mana_pool=None, stickers=None):
     """Apply a rolled face. allies = user's side; foes = the other side."""
     stickers = stickers or []
     if face.damage:
         amount = sticker_damage(face.damage, stickers, user, target)
-        deal_damage(user, target, amount, allies)
+        if deal_damage(user, target, amount, allies):
+            _run_damage_stickers(user, target, amount, face, stickers)
     if face.damage_all:
         for foe in list(alive(foes)):
             amount = sticker_damage(face.damage_all, stickers, user, foe)
-            deal_damage(user, foe, amount, allies)
+            if deal_damage(user, foe, amount, allies):
+                _run_damage_stickers(user, foe, amount, face, stickers)
             if not foe.is_alive():
                 defeat(foe, foes)
     if face.heal:
-        user.heal(face.heal)
+        ally = lowest_hp_ally(allies)
+        if ally is not None:
+            ally.heal(face.heal)
+            if ally is not user:
+                print(f"    {ally.name} is healed for {face.heal}")
+    # Face-native poison/burn/weaken still work if a face sets them; prefer stickers.
     if face.poison:
         target.add_poison(face.poison)
     if face.burn:
@@ -192,8 +216,10 @@ def burn_tick(side):
 
 
 def clear_shields(side):
+    """End-of-round cleanup: shields and weaken both last one round."""
     for character in side:
         character.clear_round_shield()
+        character.clear_round_weaken()
 
 
 def fight(party, enemies):

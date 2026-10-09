@@ -1,4 +1,4 @@
-from menu import ask_choice
+from src.menu import ask_choice
 
 
 class Inventory:

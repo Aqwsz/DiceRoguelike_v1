@@ -1,16 +1,21 @@
 from Characters import faces, stickers
-from Characters.combo import match_sticker_suffixes, parse_side_name, face_table, sticker_aliases
-from Characters.dice import Face
+from Characters.src.combo import match_sticker_suffixes, parse_side_name, face_table, sticker_aliases
+from Characters.src.dice import Face
 from Characters.stickers import Sticker
-from Items.item import (
+from Items.src.item import (
     MaxHpItem,
     PartyMaxHpItem,
     FaceSwapItem,
     StickerItem,
     MultiStickerItem,
     DamageBoostItem,
+    DamageAllBoostItem,
     HealBoostItem,
+    HealAllBoostItem,
     ShieldBoostItem,
+    ManaBoostItem,
+    PoisonBoostItem,
+    BurnBoostItem,
 )
 
 # Ready-made items, so tier files can just list them, e.g.
@@ -34,7 +39,7 @@ for amount in range(1, PARTY_MAX_HP_ITEM_LIMIT + 1):
     name = f"PARTY_MAX_HP_ITEM_{amount}"
     globals()[name] = type(name, (PartyMaxHpItem,), {"NAME": f"Rations +{amount}", "AMOUNT": amount})
 
-# DAMAGE_BOOST_1 ... : +N to every damage / damage-all face on the holder's die.
+# DAMAGE_BOOST_1 ... : +N to every plain damage face on the holder's die (not damage-all).
 DAMAGE_BOOST_LIMIT = 100
 for amount in range(1, DAMAGE_BOOST_LIMIT + 1):
     name = f"DAMAGE_BOOST_{amount}"
@@ -44,7 +49,17 @@ for amount in range(1, DAMAGE_BOOST_LIMIT + 1):
         {"NAME": f"Sharpen +{amount}", "AMOUNT": amount},
     )
 
-# HEAL_BOOST_1 ... : +N to every heal / group-heal face on the holder's die.
+# DAMAGE_ALL_BOOST_1 ... : +N to every damage-all face on the holder's die.
+DAMAGE_ALL_BOOST_LIMIT = 100
+for amount in range(1, DAMAGE_ALL_BOOST_LIMIT + 1):
+    name = f"DAMAGE_ALL_BOOST_{amount}"
+    globals()[name] = type(
+        name,
+        (DamageAllBoostItem,),
+        {"NAME": f"Cleave Edge +{amount}", "AMOUNT": amount},
+    )
+
+# HEAL_BOOST_1 ... : +N to every plain heal face on the holder's die (not group heal).
 HEAL_BOOST_LIMIT = 100
 for amount in range(1, HEAL_BOOST_LIMIT + 1):
     name = f"HEAL_BOOST_{amount}"
@@ -52,6 +67,16 @@ for amount in range(1, HEAL_BOOST_LIMIT + 1):
         name,
         (HealBoostItem,),
         {"NAME": f"Bandages +{amount}", "AMOUNT": amount},
+    )
+
+# HEAL_ALL_BOOST_1 ... : +N to every group-heal face on the holder's die.
+HEAL_ALL_BOOST_LIMIT = 100
+for amount in range(1, HEAL_ALL_BOOST_LIMIT + 1):
+    name = f"HEAL_ALL_BOOST_{amount}"
+    globals()[name] = type(
+        name,
+        (HealAllBoostItem,),
+        {"NAME": f"Field Dressing +{amount}", "AMOUNT": amount},
     )
 
 # SHIELD_BOOST_1 ... : +N to every shield face on the holder's die.
@@ -64,8 +89,52 @@ for amount in range(1, SHIELD_BOOST_LIMIT + 1):
         {"NAME": f"Plating +{amount}", "AMOUNT": amount},
     )
 
+# MANA_BOOST_1 ... : +N to every mana face on the holder's die.
+MANA_BOOST_LIMIT = 100
+for amount in range(1, MANA_BOOST_LIMIT + 1):
+    name = f"MANA_BOOST_{amount}"
+    globals()[name] = type(
+        name,
+        (ManaBoostItem,),
+        {"NAME": f"Focus +{amount}", "AMOUNT": amount},
+    )
+
+# POISON_BOOST_1 ... : +N damage on faces that already have the Poison sticker.
+POISON_BOOST_LIMIT = 100
+for amount in range(1, POISON_BOOST_LIMIT + 1):
+    name = f"POISON_BOOST_{amount}"
+    globals()[name] = type(
+        name,
+        (PoisonBoostItem,),
+        {
+            "NAME": f"Venom Edge +{amount}",
+            "AMOUNT": amount,
+            "STICKER": stickers.POISON,
+        },
+    )
+
+# BURN_BOOST_1 ... : +N damage on faces that already have the Burn sticker.
+BURN_BOOST_LIMIT = 100
+for amount in range(1, BURN_BOOST_LIMIT + 1):
+    name = f"BURN_BOOST_{amount}"
+    globals()[name] = type(
+        name,
+        (BurnBoostItem,),
+        {
+            "NAME": f"Ember Edge +{amount}",
+            "AMOUNT": amount,
+            "STICKER": stickers.BURN,
+        },
+    )
+
 _FACES = face_table()
 _STICKER_ALIASES = sticker_aliases()
+
+# Face-swap recipes for specialty bases (and sticker combos) are available as:
+#   FACE_SWAP_MANA_1, FACE_SWAP_DAMAGE_ALL_2, FACE_SWAP_GROUP_HEAL_1,
+#   FACE_SWAP_DAMAGE_1_LIFE_DRAIN, FACE_SWAP_DAMAGE_2_POISON, FACE_SWAP_DAMAGE_1_BURN, ...
+# Plain FACE_SWAP_<face> for every Face in faces.py is built below; sticker combos
+# are created lazily via __getattr__.
 
 
 def _face_swap_item(name):

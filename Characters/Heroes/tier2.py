@@ -1,5 +1,5 @@
 from Characters import faces
-from Characters.Heroes.hero import Hero
+from Characters.src.hero import Hero
 from Characters.Heroes.colors import Grey, Orange, Blue, Red
 
 ########################################################
@@ -40,7 +40,7 @@ class Assassin(Hero, Orange):
         faces.DAMAGE_3,
         faces.DAMAGE_4,
         faces.DAMAGE_4,
-        faces.WEAKEN_1,
+        faces.DAMAGE_1_WEAKEN,
         faces.MISS,
     ]
 
@@ -51,8 +51,8 @@ class Hunter(Hero, Orange):
         faces.DAMAGE_ALL_1,
         faces.DAMAGE_3,
         faces.DAMAGE_4,
-        faces.LIFE_DRAIN_1,
-        faces.LIFE_DRAIN_2,
+        faces.DAMAGE_1_LIFE_DRAIN,
+        faces.DAMAGE_2_LIFE_DRAIN,
         faces.MISS,
     ]
 
@@ -102,11 +102,11 @@ class Alchemist(Hero, Red):
     NAME = "Alchemist"
     MAX_HP = 8
     FACES = [
-        faces.POISON_1,
-        faces.BURN_2,
+        faces.DAMAGE_1_POISON,
+        faces.DAMAGE_2_BURN,
         faces.GROUP_HEAL_2,
         faces.GROUP_HEAL_3,
-        faces.WEAKEN_1,
+        faces.DAMAGE_1_WEAKEN,
         faces.MISS,
     ]
 

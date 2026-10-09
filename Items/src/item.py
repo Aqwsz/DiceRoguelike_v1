@@ -1,6 +1,6 @@
 from dataclasses import replace
 
-from menu import ask_choice
+from src.menu import ask_choice
 
 
 # Display names used when a boosted face still matches the simple "Label N" pattern.
@@ -10,6 +10,7 @@ _FACE_FIELD_LABELS = {
     "heal": "Heal",
     "group_heal": "Group Heal",
     "shield": "Shield",
+    "mana": "Mana",
 }
 
 
@@ -252,18 +253,104 @@ class FaceBoostItem(Item):
 
 
 class DamageBoostItem(FaceBoostItem):
-    """+AMOUNT to damage and damage-all faces on the holder's die."""
+    """+AMOUNT to plain damage faces on the holder's die (not damage-all)."""
     FIELD = "damage"
-    EXTRA_FIELDS = ("damage_all",)
+
+
+class DamageAllBoostItem(FaceBoostItem):
+    """+AMOUNT to damage-all faces on the holder's die."""
+    FIELD = "damage_all"
 
 
 class HealBoostItem(FaceBoostItem):
-    """+AMOUNT to heal and group-heal faces on the holder's die."""
+    """+AMOUNT to plain heal faces on the holder's die (not group heal)."""
     FIELD = "heal"
-    EXTRA_FIELDS = ("group_heal",)
+
+
+class HealAllBoostItem(FaceBoostItem):
+    """+AMOUNT to group-heal faces on the holder's die."""
+    FIELD = "group_heal"
 
 
 class ShieldBoostItem(FaceBoostItem):
     """+AMOUNT to shield faces on the holder's die."""
     FIELD = "shield"
     EXTRA_FIELDS = ()
+
+
+class ManaBoostItem(FaceBoostItem):
+    """+AMOUNT to mana faces on the holder's die."""
+    FIELD = "mana"
+
+
+class StickerDamageBoostItem(Item):
+    """+AMOUNT damage on every die face that already has STICKER on that slot.
+
+    Used for Poison / Burn boosts: raising damage also raises the status the
+    sticker applies (status equals damage dealt).
+    """
+    STICKER = None
+    AMOUNT = 1
+    FIELD = "damage"
+
+    def describe(self):
+        label = self.STICKER.name if self.STICKER else "sticker"
+        return f"+{self.AMOUNT} damage on every face with {label}"
+
+    def on_equip(self, hero, party):
+        self._apply(hero)
+
+    def on_unequip(self, hero, party):
+        self._unapply(hero)
+
+    def on_rankup(self, old_hero, new_hero):
+        self._apply(new_hero)
+
+    def _slot_has_sticker(self, hero, slot):
+        if self.STICKER is None:
+            return False
+        for existing in hero.die.stickers[slot]:
+            if existing is self.STICKER or existing.name == self.STICKER.name:
+                return True
+        return False
+
+    def _apply(self, hero):
+        self.changes = []
+        for slot, face in enumerate(hero.die.faces):
+            if not self._slot_has_sticker(hero, slot):
+                continue
+            boosted = adjust_face_field(face, self.FIELD, self.AMOUNT)
+            if boosted is None:
+                continue
+            hero.die.faces[slot] = boosted
+            self.changes.append((slot, self.FIELD, self.AMOUNT))
+        if self.changes:
+            print(f"{hero.name}: {self.describe()}")
+            print(f"  Die: {', '.join(hero.die.describe_slot(s) for s in range(len(hero.die.faces)))}")
+        else:
+            print(f"{hero.name} has no {self.STICKER.name} faces for {self.NAME}.")
+
+    def _unapply(self, hero):
+        for slot, field, amount in reversed(getattr(self, "changes", [])):
+            face = hero.die.faces[slot]
+            reduced = adjust_face_field(face, field, -amount)
+            if reduced is not None:
+                hero.die.faces[slot] = reduced
+        if getattr(self, "changes", None):
+            print(f"{hero.name}: removed {self.NAME}")
+            print(f"  Die: {', '.join(hero.die.describe_slot(s) for s in range(len(hero.die.faces)))}")
+        self.changes = []
+
+
+class PoisonBoostItem(StickerDamageBoostItem):
+    """+AMOUNT damage (and thus poison) on faces with the Poison sticker.
+
+    Subclasses / common.py set STICKER to stickers.POISON.
+    """
+
+
+class BurnBoostItem(StickerDamageBoostItem):
+    """+AMOUNT damage (and thus burn) on faces with the Burn sticker.
+
+    Subclasses / common.py set STICKER to stickers.BURN.
+    """

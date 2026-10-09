@@ -1,6 +1,6 @@
 from Characters import faces
 from Items import common
-from Items.item import Item, MaxHpItem, PartyMaxHpItem, FaceSwapItem
+from Items.src.item import Item, MaxHpItem, PartyMaxHpItem, FaceSwapItem
 
 # Add tier 10 items here (see tier1.py for examples).
 
@@ -19,5 +19,7 @@ ITEMS = [
     common.DAMAGE_BOOST_6,
     common.HEAL_BOOST_8,            # +1 to every heal / group-heal face
     common.SHIELD_BOOST_7,          # +1 to every shield face
+    common.FACE_SWAP_MANA_5,
+    
 
 ]

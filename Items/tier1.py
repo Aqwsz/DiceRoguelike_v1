@@ -1,6 +1,6 @@
 from Characters import faces
 from Items import common
-from Items.item import Item, MaxHpItem, PartyMaxHpItem, FaceSwapItem, StickerItem
+from Items.src.item import Item, MaxHpItem, PartyMaxHpItem, FaceSwapItem, StickerItem
 
 # Anything not in common.py: subclass Item and write what equipping and unequipping do.
 # class Example(Item):
@@ -23,4 +23,6 @@ ITEMS = [
     common.FACE_SWAP_HEAL_1,        # replace a face with Heal 1
     common.FACE_SWAP_DAMAGE_2_SINGLEUSE,  # Damage 2 + Single Use sticker
     common.HEAL_BOOST_1,
+    common.FACE_SWAP_MANA_1,
+    
 ]

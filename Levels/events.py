@@ -1,8 +1,8 @@
 import random
 
-from menu import ask_choice
-from Items import ITEM_TIERS
-from Items.offer import offer_item
+from src.menu import ask_choice
+from Items import ITEM_TIERS, common
+from Items.src.offer import offer_item
 
 # Chance of an event after a won fight that is not a miniboss or final boss.
 EVENT_CHANCE = 0.25
@@ -19,6 +19,12 @@ def choose_hero(party, prompt):
 def item_tier_for_fight(fight_number):
     """Same rule as main.item_tier: fights 1-2 -> tier 1, 3-4 -> tier 2, ..."""
     return min((fight_number + 1) // 2, max(ITEM_TIERS))
+
+
+def grant_and_equip(party, inventory, item):
+    """Add an item to the bag and run the normal equip flow (FaceSwap asks for a die face)."""
+    inventory.add(item)
+    inventory.equip(item, party)
 
 
 class Event:
@@ -100,8 +106,101 @@ class ForkedPath(Event):
         print(f"The march toughens everyone: {', '.join(str(hero) for hero in party)}")
 
 
+class ShrineOfPoison(Event):
+    TITLE = "Shrine of Poison"
+
+    def choices(self, party, inventory):
+        return [
+            ("Take a Damage 1 [Poison] face-swap item", self.bless),
+        ]
+
+    def bless(self, party, inventory):
+        item = common.FACE_SWAP_DAMAGE_1_POISON(item_tier_for_fight(self.fight_number))
+        grant_and_equip(party, inventory, item)
+        print(f"You claim {item.NAME}.")
+
+
+class ShrineOfBurn(Event):
+    TITLE = "Shrine of Burn"
+
+    def choices(self, party, inventory):
+        return [
+            ("Take a Damage 1 [Burn] face-swap item", self.bless),
+        ]
+
+    def bless(self, party, inventory):
+        item = common.FACE_SWAP_DAMAGE_1_BURN(item_tier_for_fight(self.fight_number))
+        grant_and_equip(party, inventory, item)
+        print(f"You claim {item.NAME}.")
+
+
+class CoinFlip(Event):
+    TITLE = "Coin Flip"
+
+    def choices(self, party, inventory):
+        return [
+            ("Flip for a hero: +2 max HP or nothing", self.flip),
+        ]
+
+    def flip(self, party, inventory):
+        hero = choose_hero(party, "Who risks the flip?")
+        if random.random() < 0.5:
+            hero.raise_base_max_hp(2)
+            print(f"Heads — {hero.name} gains +2 max HP: {hero}")
+        else:
+            print(f"Tails — nothing happens. {hero.name} stays {hero}")
+
+
+class ScapegoatPact(Event):
+    TITLE = "Scapegoat Pact"
+
+    def choices(self, party, inventory):
+        return [
+            ("Name a scapegoat (−1 max HP; each other hero +1 max HP)", self.pact),
+        ]
+
+    def pact(self, party, inventory):
+        scapegoat = choose_hero(party, "Who is the scapegoat?")
+        scapegoat.lower_base_max_hp(1)
+        for hero in party:
+            if hero is not scapegoat:
+                hero.raise_base_max_hp(1)
+        print(f"{scapegoat.name} bears the cost: {scapegoat}")
+        others = [hero for hero in party if hero is not scapegoat]
+        if others:
+            print(f"The rest grow: {', '.join(str(hero) for hero in others)}")
+
+
+class IronBinding(Event):
+    TITLE = "Iron Binding"
+
+    def choices(self, party, inventory):
+        return [
+            ("Bind a random hero (+2 max HP; next fight starts at half HP)", self.bind),
+        ]
+
+    def bind(self, party, inventory):
+        hero = random.choice(party)
+        hero.raise_base_max_hp(2)
+        hero.next_fight_half_hp = True
+        print(
+            f"{hero.name} is bound in iron: +2 max HP, "
+            f"but enters the next fight at half HP ({hero})"
+        )
+
+
 # Add new Event subclasses here.
-EVENTS = [GainAnItem, ShrineOfVigor, BloodAltar, ForkedPath]
+EVENTS = [
+    GainAnItem,
+    ShrineOfVigor,
+    BloodAltar,
+    ForkedPath,
+    ShrineOfPoison,
+    ShrineOfBurn,
+    CoinFlip,
+    ScapegoatPact,
+    IronBinding,
+]
 
 
 def is_boss_fight(fight_plan):

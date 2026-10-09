@@ -1,5 +1,5 @@
-from Characters.combo import sides_from_faces
-from Characters.dice import Die
+from Characters.src.combo import sides_from_faces
+from Characters.src.dice import Die
 
 # How much poison wears off after each poison tick. 0 = poison lasts the whole fight.
 POISON_DECAY = 0
@@ -39,12 +39,17 @@ class Character:
         self.single_use_spent = set()
         self.previous_slot = None
         self.current_slot = None
+        # Event flag: next fight opens at half HP (cleared when that fight begins).
+        self.next_fight_half_hp = False
 
     def begin_fight(self):
-        """Reset per-fight sticker / roll tracking."""
+        """Reset per-fight sticker / roll tracking; apply pending start-of-fight penalties."""
         self.single_use_spent = set()
         self.previous_slot = None
         self.current_slot = None
+        if getattr(self, "next_fight_half_hp", False):
+            self.hitpoints = max(1, self.max_hp // 2)
+            self.next_fight_half_hp = False
 
     def is_alive(self):
         return self.hitpoints > 0
@@ -99,6 +104,10 @@ class Character:
     def clear_round_shield(self):
         self.shield = 0
 
+    def clear_round_weaken(self):
+        """Weaken lasts one round, then fades."""
+        self.weaken = 0
+
     def raise_base_max_hp(self, amount):
         """Permanent max HP increase; also heals by the same amount."""
         self.base_max_hp += amount
@@ -120,7 +129,10 @@ class Character:
         self.weaken = 0
         self.stunned = False
         self.thorns = False
-        self.begin_fight()
+        # Reset fight trackers without applying next-fight HP penalties.
+        self.single_use_spent = set()
+        self.previous_slot = None
+        self.current_slot = None
 
     def __str__(self):
         parts = [f"{self.hitpoints}/{self.max_hp} HP"]

@@ -7,6 +7,8 @@ Tick items off as they're done. "Check" lists what gets verified when you ask fo
 - [x] Tier 2 heroes (Knight, Paladin, Assassin, Hunter, Magician, Sorcerer)
 - [x] Tier 3 heroes (Barbarian, Ragebringer, Sniper, Quartermaster, Queen, Cleric)
 - [x] Decide how tier 2 and 3 heroes enter a run: after every even fight win, pick 1 of 2 rank-ups for a lowest-tier hero (`hero_rankup.py`)
+- [ ] Add more heroes (expand color pools especially at T1 so random color draft has variety)
+- [ ] Party select: show 3 options of **3 colors** (not 3 named heroes); on pick, roll a random T1 hero from each chosen color pool — party composition is hidden until after selection
 
 Check: every class is in its file's `HEROES` list, has exactly 6 faces, and every face exists in `faces.py`. Party options never repeat a hero.
 
@@ -14,7 +16,7 @@ Check: every class is in its file's `HEROES` list, has exactly 6 faces, and ever
 - [x] Tier 1 (Slime, Goblin, Skeleton, Crawler)
 - [x] Tier 2 (Ogre, Troll, Vampire, Slime Mother)
 - [x] Tier 3 (Hawk, Dice, Werewolf, Bomber)
-- [x] Minibosses (Witch, Pirate, Vampire)
+- [x] Minibosses (Witch, Pirate, Bloodsucker)
 - [x] Final bosses (Dragon, Graveyard King)
 - [x] Two different enemies are both named "Vampire" (tier 2 and miniboss)
 
@@ -51,6 +53,7 @@ Not a new die face by itself: extra rules stuck onto an existing face (and items
 - [x] Unequipping an item removes the sticker it added
 - [x] Double damage if at full HP (`stickers.FIRST_STRIKE`, tier-1 item)
 - [x] Double damage if below half HP (`stickers.EXECUTE`, tier-2 item)
+- [x] Damage-scaling status stickers: Poison, Burn, Weaken, Life Drain (`DAMAGE_N_POISON`, etc.)
 
 Check: a face with a sticker still rolls as that face, plus the extra rule; removing the item undoes the sticker.
 
@@ -66,6 +69,10 @@ Check: a face with a sticker still rolls as that face, plus the extra rule; remo
 - [x] Temporary items (raise `max_hp` only, removed by the full heal after a fight)
 - [ ] Extra reward after every miniboss fight
 - [ ] Permanent HP carries into prestige runs (needs prestige, see 7)
+- [ ] Add new items to tier pools (framework ready, not in `ITEMS` yet):
+  - [x] Face-swaps: `FACE_SWAP_MANA_*`, `FACE_SWAP_DAMAGE_ALL_*`, `FACE_SWAP_GROUP_HEAL_*`, `FACE_SWAP_DAMAGE_*_LIFE_DRAIN`, `FACE_SWAP_DAMAGE_*_POISON`, `FACE_SWAP_DAMAGE_*_BURN`, `FACE_SWAP_DAMAGE_*_WEAKEN`
+  - [ ] Boosts: `MANA_BOOST_*`, `POISON_BOOST_*`, `BURN_BOOST_*`
+  - [x] Stickers as items: `STICKER_POISON`, `STICKER_BURN`, `STICKER_WEAKEN`, `STICKER_LIFE_DRAIN`
 
 Check: every item class is in its file's `ITEMS` list and applies without errors; permanent HP items raise `base_max_hp` and survive full heals and hero rank-ups; the inventory lists every item obtained.
 
@@ -82,13 +89,14 @@ Check: an event can appear after a normal fight; miniboss and boss fights never 
 ## Add UI
 - [x] Browser UI (`python3 -m ui.server` → http://127.0.0.1:8765)
 - [x] Party select, fight view, item/rank-up/event choices
-- [ ] Polish: animations, sound, inventory manage screen
+- [ ] Polish: animations (basic dice + attack lines in), sound, inventory manage screen
 
 ## Organize files
-- [ ] Python files that only describe the framework and keep the game intact like combat.py and inventory.py go into a directory called /src/. If there are files like this inside directorys, like /Items/ or /Characters/, put in its own /src/ directory inside the initial directory
-- [ ] Files that require edits in the future, like items, tiers, heroes, enemies, should stay mostly where they currently are
+- [x] Framework code in `src/` (combat, inventory, menu, hero_rankup) and nested `Characters/src/`, `Items/src/`
+- [x] Content files (tiers, faces, stickers, events, fights, common items) stay editable in place
 
 ## Make minibosses harder
+- [x]
 
 ## 7. Add prestige
 Beat fight 20 to prestige; then a prestige shop, and run fights 1-20 again at a harder prestige level.
@@ -97,6 +105,14 @@ Beat fight 20 to prestige; then a prestige shop, and run fights 1-20 again at a 
 - [ ] Prestige currency and what it's earned from
 - [ ] Prestige shop
 - [ ] Decide what carries over into the next prestige run and what resets
+- [ ] Prestige **perks** (player buffs; design/implement later). Candidate options:
+  - [ ] Add a T1 (color) hero — extra party seat filled from a chosen color pool
+  - [ ] Start with an item
+  - [ ] Increase item slots (`MAX_ITEMS`)
+  - [ ] Increase rank-up options (more choices when ranking up)
+  - [ ] Increase item options (more picks after odd fights)
+  - [ ] Increase event chance
+- [ ] Prestige **curses** (run-wide difficulty; pair with perks — not Ultra-style per-round blessing/curse)
 
 Check: prestige 1 is harder than prestige 0; shop purchases apply in the next run; prestige ends at 10.
 
@@ -123,7 +139,7 @@ Check: passives and synergies apply in combat; ranking up a hero updates which p
 
 ## 11. Quality of life (options)
 - [ ] Colored output option (e.g. red damage, green heal, purple poison)
-- [ ] Auto-roll option (skip "press Enter" each round)
+- [x] Auto-roll option (skip "press Enter" each round)
 
 Check: both can be turned on and off; the game still plays correctly with either off.
 

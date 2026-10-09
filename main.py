@@ -6,12 +6,12 @@ from Characters.Heroes import HERO_TIERS
 from Characters.Enemies import ENEMY_TIERS
 from Levels.fights import FIGHTS
 from Levels.events import maybe_run_event
-from combat import fight
-from menu import ask_choice, describe_hero_class
-from hero_rankup import offer_rankup
+from src.combat import fight
+from src.menu import ask_choice, describe_hero_class
+from src.hero_rankup import offer_rankup
 from Items import ITEM_TIERS
-from Items.offer import offer_item
-from inventory import Inventory
+from Items.src.offer import offer_item
+from src.inventory import Inventory
 
 PARTY_SIZE = 3
 PARTY_OPTIONS = 3

@@ -1,5 +1,5 @@
 from Characters import faces
-from Characters.Enemies.enemy import Enemy
+from Characters.src.enemy import Enemy
 
 
 class Slime(Enemy):

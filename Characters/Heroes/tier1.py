@@ -1,5 +1,5 @@
 from Characters import faces
-from Characters.Heroes.hero import Hero
+from Characters.src.hero import Hero
 from Characters.Heroes.colors import Grey, Orange, Blue, Red
 
 ########################################################
@@ -52,8 +52,8 @@ class Rogue(Hero, Orange):
         faces.DAMAGE_1,         # 1 damage
         faces.DAMAGE_1,         # 1 damage
         faces.DAMAGE_2,         # 2 damage
-        faces.LIFE_DRAIN_1,
-        faces.LIFE_DRAIN_1,
+        faces.DAMAGE_1_LIFE_DRAIN,
+        faces.DAMAGE_1_LIFE_DRAIN,
         faces.HEAL_1,
     ]
 
@@ -103,8 +103,8 @@ class Potioner(Hero, Red):
     NAME = "Potioner"
     MAX_HP = 6
     FACES = [
-        faces.POISON_1,
-        faces.POISON_1,
+        faces.DAMAGE_1_POISON,
+        faces.DAMAGE_1_POISON,
         faces.GROUP_HEAL_1,
         faces.GROUP_HEAL_1,
         faces.MISS,

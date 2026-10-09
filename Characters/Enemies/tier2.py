@@ -1,5 +1,5 @@
 from Characters import faces
-from Characters.Enemies.enemy import Enemy
+from Characters.src.enemy import Enemy
 from Characters.Enemies.tier1 import Slime
 
 # Add tier 2 enemies here (same format as tier1.py).
@@ -21,7 +21,7 @@ class Troll(Enemy):
     FACES = [
         faces.DAMAGE_5,
         faces.DAMAGE_5,
-        faces.LIFE_DRAIN_2,
+        faces.DAMAGE_2_LIFE_DRAIN,
         faces.MISS,
         faces.MISS,
         faces.MISS,
@@ -33,9 +33,9 @@ class Vampire(Enemy):
     FACES = [
         faces.DAMAGE_4,
         faces.DAMAGE_4,
-        faces.LIFE_DRAIN_3,
-        faces.LIFE_DRAIN_3,
-        faces.LIFE_DRAIN_3,
+        faces.DAMAGE_3_LIFE_DRAIN,
+        faces.DAMAGE_3_LIFE_DRAIN,
+        faces.DAMAGE_3_LIFE_DRAIN,
         faces.MISS,
     ]
 

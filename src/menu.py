@@ -1,5 +1,5 @@
 def describe_hero_class(hero_class, indent):
-    from Characters.combo import as_side
+    from Characters.src.combo import as_side
     faces = ", ".join(as_side(entry).name for entry in hero_class.FACES)
     print(f"{indent}{hero_class.NAME} - {hero_class.MAX_HP} HP")
     print(f"{indent}  Die: {faces}")

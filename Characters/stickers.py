@@ -5,7 +5,7 @@ Items reference them via Items/common.py (STICKER_EXECUTE, ...).
 
 Any number of stickers can stack on one face. Damage multipliers stack
 (multiply). Stickers can also rewrite the rolled face (Single Use -> Miss)
-or react after the face is applied.
+or react after damage is dealt (Poison / Burn / Weaken / Life Drain).
 """
 
 class Sticker:
@@ -33,6 +33,13 @@ class Sticker:
         Called separately for each foe when the face deals damage or damage_all.
         """
         return 1.0
+
+    def after_damage(self, user, target, amount, face):
+        """Called when this face deals damage to target (amount after multipliers).
+
+        Not called if the hit was redirected by thorns or dealt 0.
+        """
+        pass
 
     def after_applied(self, user, roll, face_used):
         """Called once after the face (possibly rewritten) has been applied."""
@@ -93,8 +100,53 @@ class DejaVu(Sticker):
         return 1.0
 
 
+class Poison(Sticker):
+    NAME = "Poison"
+    DESCRIPTION = "Apply poison equal to damage dealt"
+
+    def after_damage(self, user, target, amount, face):
+        if amount > 0:
+            target.add_poison(amount)
+            print(f"    {target.name} gains {amount} poison")
+
+
+class Burn(Sticker):
+    NAME = "Burn"
+    DESCRIPTION = "Apply burn equal to damage dealt"
+
+    def after_damage(self, user, target, amount, face):
+        if amount > 0:
+            target.add_burn(amount)
+            print(f"    {target.name} gains {amount} burn")
+
+
+class Weaken(Sticker):
+    NAME = "Weaken"
+    DESCRIPTION = "Apply weaken equal to damage dealt (1 turn)"
+
+    def after_damage(self, user, target, amount, face):
+        if amount > 0:
+            target.add_weaken(amount)
+            print(f"    {target.name} gains {amount} weaken")
+
+
+class LifeDrain(Sticker):
+    NAME = "Life Drain"
+    DESCRIPTION = "Heal self for damage dealt"
+
+    def after_damage(self, user, target, amount, face):
+        if amount > 0 and user is not None:
+            user.heal(amount)
+            print(f"    {user.name} drains {amount} HP")
+
+
 # Named instances — items and die definitions reference these.
 EXECUTE = Execute()
 FIRST_STRIKE = FirstStrike()
 SINGLE_USE = SingleUse()
 DEJA_VU = DejaVu()
+POISON = Poison()
+BURN = Burn()
+WEAKEN = Weaken()
+LIFE_DRAIN = LifeDrain()
+LIFEDRAIN = LIFE_DRAIN  # alias for DAMAGE_1_LIFEDRAIN recipes

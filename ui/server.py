@@ -53,6 +53,12 @@ class Handler(SimpleHTTPRequestHandler):
         except json.JSONDecodeError:
             return {}
 
+    def end_headers(self):
+        # Avoid stale JS/CSS after edits (normal refresh was serving cached app.js).
+        if self.path.endswith((".js", ".css", ".html")) or self.path in ("/", "/index.html"):
+            self.send_header("Cache-Control", "no-store")
+        super().end_headers()
+
     def do_GET(self):
         path = urlparse(self.path).path
         if path == "/api/state":
@@ -64,7 +70,14 @@ class Handler(SimpleHTTPRequestHandler):
     def do_POST(self):
         path = urlparse(self.path).path
         if path == "/api/new":
-            return self._json(200, SESSION.start())
+            return self._json(200, SESSION.start(from_save=False))
+        if path == "/api/continue":
+            return self._json(200, SESSION.start(from_save=True))
+        if path == "/api/save":
+            return self._json(200, SESSION.save_game())
+        if path == "/api/quit":
+            data = self._read_json()
+            return self._json(200, SESSION.quit_to_title(save=bool(data.get("save"))))
         if path == "/api/choose":
             data = self._read_json()
             index = data.get("index", 0)
@@ -73,6 +86,34 @@ class Handler(SimpleHTTPRequestHandler):
             except (TypeError, ValueError):
                 index = 0
             return self._json(200, SESSION.choose(index))
+        if path == "/api/advance":
+            return self._json(200, SESSION.advance())
+        if path == "/api/settings":
+            data = self._read_json()
+            if "auto_play" in data:
+                return self._json(200, SESSION.set_auto_play(bool(data["auto_play"])))
+            return self._json(200, SESSION.snapshot())
+        if path == "/api/inventory/equip":
+            data = self._read_json()
+            try:
+                item_id = int(data.get("item_id"))
+                hero_index = int(data.get("hero_index", 0))
+            except (TypeError, ValueError):
+                return self._json(400, {"error": "bad item_id or hero_index"})
+            face_slot = data.get("face_slot", None)
+            if face_slot is not None:
+                try:
+                    face_slot = int(face_slot)
+                except (TypeError, ValueError):
+                    face_slot = None
+            return self._json(200, SESSION.equip_from_bag(item_id, hero_index, face_slot))
+        if path == "/api/inventory/unequip":
+            data = self._read_json()
+            try:
+                item_id = int(data.get("item_id"))
+            except (TypeError, ValueError):
+                return self._json(400, {"error": "bad item_id"})
+            return self._json(200, SESSION.unequip_to_bag(item_id))
         self._json(404, {"error": "not found"})
 
 
